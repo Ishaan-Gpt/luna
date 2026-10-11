@@ -1,0 +1,31 @@
+import type { Loc } from "./sky";
+
+/** Places to start from when GPS isn't available. Coordinates are city centres. */
+export const CITIES: Loc[] = [
+  { name: "Hanle, Ladakh", lat: 32.78, lon: 78.96, tz: "Asia/Kolkata", elev: 4500 },
+  { name: "Leh", lat: 34.15, lon: 77.58, tz: "Asia/Kolkata", elev: 3500 },
+  { name: "Delhi", lat: 28.61, lon: 77.21, tz: "Asia/Kolkata" },
+  { name: "Mumbai", lat: 19.08, lon: 72.88, tz: "Asia/Kolkata" },
+  { name: "Bengaluru", lat: 12.97, lon: 77.59, tz: "Asia/Kolkata" },
+  { name: "Chennai", lat: 13.08, lon: 80.27, tz: "Asia/Kolkata" },
+  { name: "Kolkata", lat: 22.57, lon: 88.36, tz: "Asia/Kolkata" },
+  { name: "Hyderabad", lat: 17.39, lon: 78.49, tz: "Asia/Kolkata" },
+  { name: "Pune", lat: 18.52, lon: 73.86, tz: "Asia/Kolkata" },
+  { name: "Ahmedabad", lat: 23.02, lon: 72.57, tz: "Asia/Kolkata" },
+  { name: "Jaipur", lat: 26.91, lon: 75.79, tz: "Asia/Kolkata" },
+  { name: "Lucknow", lat: 26.85, lon: 80.95, tz: "Asia/Kolkata" },
+  { name: "Chandigarh", lat: 30.73, lon: 76.78, tz: "Asia/Kolkata" },
+  { name: "Guwahati", lat: 26.14, lon: 91.74, tz: "Asia/Kolkata" },
+  { name: "Kochi", lat: 9.93, lon: 76.27, tz: "Asia/Kolkata" },
+  { name: "Dubai", lat: 25.2, lon: 55.27, tz: "Asia/Dubai" },
+  { name: "Singapore", lat: 1.35, lon: 103.82, tz: "Asia/Singapore" },
+  { name: "Tokyo", lat: 35.68, lon: 139.69, tz: "Asia/Tokyo" },
+  { name: "Sydney", lat: -33.87, lon: 151.21, tz: "Australia/Sydney" },
+  { name: "Nairobi", lat: -1.29, lon: 36.82, tz: "Africa/Nairobi" },
+  { name: "Cape Town", lat: -33.92, lon: 18.42, tz: "Africa/Johannesburg" },
+  { name: "London", lat: 51.51, lon: -0.13, tz: "Europe/London" },
+  { name: "Berlin", lat: 52.52, lon: 13.4, tz: "Europe/Berlin" },
+  { name: "New York", lat: 40.71, lon: -74.01, tz: "America/New_York" },
+  { name: "San Francisco", lat: 37.77, lon: -122.42, tz: "America/Los_Angeles" },
+  { name: "São Paulo", lat: -23.55, lon: -46.63, tz: "America/Sao_Paulo" },
+];

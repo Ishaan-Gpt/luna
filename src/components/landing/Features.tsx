@@ -8,8 +8,8 @@ import { AnyNightScreen, LockScreen, Phone, PointAskScreen, SkyCheckScreen } fro
 const FEATURES = [
   {
     title: "Point + ask",
-    specs: [["Runs on", "Your phone"], ["Needs signal", "No"]],
-    body: "Hold the phone toward the sky and ask what you're looking at. The compass tells Luna where you're pointing; the answer comes back spoken, in fists and directions, on a red screen that keeps your night vision.",
+    specs: [["Runs on", "Your device"], ["Needs signal", "No"]],
+    body: "Hold the phone toward the sky and ask, typed or out loud, what you're looking at. The compass tells Luna where you're pointing, Gemma answers on your device, and every claim is checked against the sky before it is read aloud.",
     Screen: PointAskScreen,
   },
   {

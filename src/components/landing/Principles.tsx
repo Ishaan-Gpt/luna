@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BP, gsap, reduced, ScrollTrigger, setupGsap } from "@/lib/motion";
 import { Mark, VineA } from "./primitives";
 
-const ITEMS = ["Open weights", "Runs on your phone", "No account", "No tracking", "Red-light screen", "Any date, any year"];
+const ITEMS = ["Open weights", "Runs on your device", "No account", "No tracking", "Red-light screen", "Any date, any year"];
 
 /**
  * Why it's open, then six plain promises over a lake going from dusk to night.
@@ -82,7 +82,7 @@ export function Principles() {
           <div className="absolute bottom-[10vh] left-[calc(var(--gutter)+130px)] max-w-[34ch] max-lg:bottom-[8vh] max-lg:left-6 max-lg:right-6">
             <p className="t-label mb-3 text-star/70">Why open</p>
             <p className="t-body text-star/85">
-              A closed model lives on someone else&rsquo;s server, and that server is out of reach at 4,500 metres. Open weights let Luna travel with you, keep your location to itself, and swap in a smaller model on an older phone.
+              A closed model lives on someone else&rsquo;s server, and that server is out of reach at 4,500 metres. Open weights let Luna travel with you, keep your location to itself, and answer every question for free.
             </p>
           </div>
 

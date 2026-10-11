@@ -11,7 +11,7 @@ const URL_ = process.env.SHOT_URL ?? "http://localhost:3210/";
 const CHROME = process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const port = 9333 + Math.floor(Math.random() * 400);
 const profile = await fs.mkdtemp(path.join(os.tmpdir(), "luna-shots-"));
-const chrome = spawn(CHROME, [`--headless=new`, `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, "--hide-scrollbars", "--force-device-scale-factor=1", "--no-first-run", "about:blank"], { stdio: "ignore" });
+const chrome = spawn(CHROME, [`--headless=new`, `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, "--hide-scrollbars", "--force-device-scale-factor=1", "--no-first-run", ...(process.env.SHOT_FLAGS ? process.env.SHOT_FLAGS.split(" ") : []), "about:blank"], { stdio: "ignore" });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let ws;
@@ -30,6 +30,8 @@ let id = 0;
 const pending = new Map();
 ws.addEventListener("message", (e) => {
   const m = JSON.parse(e.data);
+  if (m.method === "Runtime.exceptionThrown") console.log("PAGE ERROR:", m.params.exceptionDetails?.exception?.description?.split(String.fromCharCode(10)).slice(0, 3).join(" | ") ?? m.params.exceptionDetails?.text);
+  if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") console.log("CONSOLE ERROR:", m.params.args.map((a) => a.value ?? a.description ?? "").join(" ").slice(0, 300));
   if (m.id && pending.has(m.id)) {
     pending.get(m.id)(m);
     pending.delete(m.id);
@@ -39,13 +41,26 @@ const send = (method, params = {}) => new Promise((r) => { const i = ++id; pendi
 const evaluate = async (expr) => (await send("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true })).result?.result?.value;
 
 await send("Page.enable");
+if (process.env.SHOT_INIT) await send("Page.addScriptToEvaluateOnNewDocument", { source: process.env.SHOT_INIT });
 await send("Runtime.enable");
 await send("Emulation.setDeviceMetricsOverride", { width: +W, height: +H, deviceScaleFactor: 1, mobile: +W < 600 });
 await fs.mkdir(outDir, { recursive: true });
 
 async function shoot(y, name) {
-  await send("Page.navigate", { url: `${URL_}?shot=${y}` });
-  await sleep(4200);
+  const [base, hash] = URL_.split("#");
+  await send("Page.navigate", { url: `${base}?shot=${y}${hash ? `#${hash}` : ""}` });
+  await sleep(Number(process.env.SHOT_WAIT ?? 4200));
+  if (process.env.SHOT_OFFLINE) {
+    // first visit done: now cut the network and reload, like airplane mode
+    await send("Network.enable");
+    await send("Network.emulateNetworkConditions", { offline: true, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
+    await send("Page.reload", { ignoreCache: false });
+    await sleep(Number(process.env.SHOT_WAIT ?? 4200));
+  }
+  if (process.env.SHOT_ACTION) {
+    console.log("action:", JSON.stringify(await evaluate(process.env.SHOT_ACTION)));
+    await sleep(Number(process.env.SHOT_AFTER ?? 2500));
+  }
   if (process.env.SHOT_EVAL) console.log("eval@" + y, JSON.stringify(await evaluate(process.env.SHOT_EVAL)));
   const { result } = await send("Page.captureScreenshot", { format: "jpeg", quality: 72 });
   const file = path.join(outDir, `${name}.jpg`);

@@ -15,7 +15,7 @@ const SLIDES = [
     title: "Point and ask",
     img: "/art/rooftop-city.webp",
     alt: "A city terrace at night with water tanks and a few bright stars",
-    body: "Aim your phone, hold the button and ask out loud. Gemma runs on the phone, uses the compass to know what you mean by that one, and answers in a sentence you can follow with your eyes.",
+    body: "Aim your phone and ask. Gemma runs on your device, Luna uses the compass to know what you mean by that one, and the answer is checked against the sky before you hear it.",
   },
   {
     title: "The sky is the setup",

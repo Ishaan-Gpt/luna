@@ -62,7 +62,7 @@ export function NightBar({ night, loc, cursor, clouds, compact = false }: Props)
             className="absolute -top-1.5 bottom-[-6px] rounded-lg border border-torch/80 shadow-[0_0_24px_-6px_rgba(229,83,61,.8)]"
             style={{ left: `${x(night.best.start)}%`, width: `${x(night.best.end) - x(night.best.start)}%` }}
           >
-            <span className="mono absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[0.66rem] text-torch-ink">best window</span>
+            <span className="t-label !tracking-[0.08em] absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[0.66rem] text-torch">best window</span>
           </div>
         )}
         {cursor && (
@@ -83,7 +83,7 @@ export function NightBar({ night, loc, cursor, clouds, compact = false }: Props)
           {cloudBars.map((c, i) => (
             <div
               key={i}
-              className="absolute bottom-0 w-[3px] -translate-x-1/2 rounded-full bg-star-3"
+              className="absolute bottom-0 w-[3px] -translate-x-1/2 rounded-full bg-star/50"
               style={{ left: `${x(c.t)}%`, height: `${Math.max(8, c.cloud)}%`, opacity: 0.3 + c.cloud / 160 }}
               title={`${c.cloud}% cloud`}
             />
@@ -92,15 +92,15 @@ export function NightBar({ night, loc, cursor, clouds, compact = false }: Props)
       )}
       <div className="relative mt-2 h-4">
         {ticks.map((t, i) => (
-          <span key={i} className="mono absolute -translate-x-1/2 text-[0.62rem] text-star-3" style={{ left: `${t.pos}%` }}>
+          <span key={i} className="t-label !tracking-[0.08em] absolute -translate-x-1/2 text-[0.62rem] text-star/50" style={{ left: `${t.pos}%` }}>
             {t.label}
           </span>
         ))}
       </div>
       {!compact && (
-        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[0.75rem] text-star-3">
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[0.75rem] text-star/50">
           <span className="flex items-center gap-2"><i className="h-1.5 w-4 rounded-full bg-[#f4ecdc]/70" /> Moon above horizon</span>
-          {cloudBars.length > 0 && <span className="flex items-center gap-2"><i className="h-3 w-[3px] rounded-full bg-star-3" /> Cloud cover by hour</span>}
+          {cloudBars.length > 0 && <span className="flex items-center gap-2"><i className="h-3 w-[3px] rounded-full bg-star/50" /> Cloud cover by hour</span>}
           <span className="flex items-center gap-2"><i className="h-3 w-4 rounded border border-torch" /> Darkest, moon-free stretch</span>
         </div>
       )}
