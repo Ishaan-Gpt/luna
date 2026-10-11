@@ -1,6 +1,6 @@
 // Luna's service worker: keeps the app, its star catalogue and the on-device AI runtime available offline.
 // Models themselves live in the "luna-models-v1" cache, written by the app.
-const V = "luna-shell-v1";
+const V = "luna-shell-v2";
 const CORE = [
   "/sky",
   "/manifest.webmanifest",
@@ -23,7 +23,7 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-const isStatic = (url) => url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/art/") || url.pathname.startsWith("/data/") || url.pathname.startsWith("/mediapipe/") || url.pathname.startsWith("/icons/") || url.hostname === "fonts.gstatic.com";
+const isStatic = (url) => url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/art/") || url.pathname.startsWith("/data/") || url.pathname.startsWith("/mediapipe/") || url.pathname.startsWith("/icons/") || url.pathname.startsWith("/voice/") || url.hostname === "fonts.gstatic.com";
 
 self.addEventListener("fetch", (e) => {
   const req = e.request;

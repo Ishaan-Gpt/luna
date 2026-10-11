@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { playStory, stopStory, useVoicePack } from "@/lib/voice";
 import { altFn, dirWord, fistsText, riseSet } from "@/lib/ground";
 import { conName } from "@/lib/catalog";
 import { fmtTime } from "@/lib/sky";
@@ -21,6 +22,15 @@ export function ObjectSheet() {
   const extra = obj?.kind === "star" ? STARS.find((s) => s.name.toLowerCase() === obj.name.toLowerCase()) : undefined;
   const marked = obj ? marks.includes(obj.id) : false;
   const nick = obj ? nicknames[obj.id] ?? "" : "";
+  const voice = useVoicePack();
+  const story = obj ? voice?.stories[obj.id] : undefined;
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    if (!obj) {
+      stopStory();
+      setTimeout(() => setPlaying(false), 0);
+    }
+  }, [obj]);
 
   const ask = () => {
     if (!obj) return;
@@ -54,6 +64,8 @@ export function ObjectSheet() {
             {obj.kind === "star" && obj.id.startsWith("hip:") && <Row k="Catalogue" v={`HIP ${obj.id.slice(4)}`} sub="Hipparcos" />}
           </div>
 
+          {story && <p className="t-body mt-5 text-star/70">{story.text}</p>}
+
           {obj.kind !== "sun" && (
             <>
               <div className="mt-6 flex flex-wrap gap-2">
@@ -61,6 +73,11 @@ export function ObjectSheet() {
                   <GMine size={16} active={marked} /> {marked ? "Marked" : "Mark it"}
                 </Btn>
                 <Btn onClick={ask}>Ask Luna about it</Btn>
+                {story && (
+                  <Btn variant={playing ? "torch" : "line"} onClick={() => { if (playing) { stopStory(); setPlaying(false); } else { setPlaying(true); playStory(story.file, () => setPlaying(false)); } }}>
+                    {playing ? "Stop" : "Listen"}
+                  </Btn>
+                )}
               </div>
               <label className="mt-6 block">
                 <span className="t-label text-star/55">Nickname, just for you</span>

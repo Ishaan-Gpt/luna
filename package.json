@@ -9,7 +9,9 @@
     "lint": "eslint",
     "postinstall": "node scripts/copy-wasm.mjs",
     "prebuild": "node scripts/copy-wasm.mjs",
-    "catalog": "node scripts/build-catalog.mjs"
+    "catalog": "node scripts/build-catalog.mjs",
+    "voice": "node scripts/voice-pack.mjs",
+    "voice:demo": "node scripts/voice-pack.mjs --demo"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
