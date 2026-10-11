@@ -18,7 +18,8 @@ export const viewport: Viewport = { themeColor: "#081115", colorScheme: "dark" }
 
 // Before first paint: decide whether the moonrise preloader plays (once per session, never with reduced motion),
 // and mark that JS is running so reveal targets can start hidden. A timer unhides them if motion never boots.
-const boot = `(function(){var d=document.documentElement;d.classList.add('js');try{var r=matchMedia('(prefers-reduced-motion: reduce)').matches;d.dataset.intro=(r||/[?&]shot=/.test(location.search))?'none':(sessionStorage.getItem('luna-intro')?'short':'long')}catch(e){d.dataset.intro='none'}setTimeout(function(){d.classList.add('motion-fallback')},6000)})()`;
+// An installed Luna (home-screen app or the Android APK) opens straight into the sky, never the landing page.
+const boot = `(function(){var d=document.documentElement;try{if(location.pathname==='/'&&(matchMedia('(display-mode: standalone)').matches||navigator.standalone||document.referrer.indexOf('android-app://')===0)){location.replace('/sky');return}}catch(e){}d.classList.add('js');try{var r=matchMedia('(prefers-reduced-motion: reduce)').matches;d.dataset.intro=(r||/[?&]shot=/.test(location.search))?'none':(sessionStorage.getItem('luna-intro')?'short':'long')}catch(e){d.dataset.intro='none'}setTimeout(function(){d.classList.add('motion-fallback')},6000)})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

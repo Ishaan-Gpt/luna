@@ -4,8 +4,11 @@
 Built for the [Hacktoberfest 2026 Open-Source AI Challenge, Week 1: Touch Grass](https://dev.to/challenges/hacktoberfest-week1-2026-10-05).
 
 - **Landing:** `/`
+- **Get the app:** `/get`, which detects the device: an Android APK (plus Chrome's one-tap install), Add to Home Screen steps for iPhone, and on a computer a plain "Luna lives on your phone" screen with a QR code and an honest preview
 - **App:** `/sky` (installable, works offline after one visit)
 - **Printable planisphere:** `/sky/print?lat=32.78`
+
+Luna is a phone app. It needs a compass, tilt sensors, GPS and the sky above you, so on a computer it says so up front and offers a preview (sky map, Tonight, Ask with Gemma, Places) with the phone-only features listed.
 
 ## What it does
 
@@ -28,7 +31,9 @@ Browser (works offline after one visit)
 │               downloaded once into Cache Storage, stream-loaded from there
 ├─ Grounding ── facts → prompt → Gemma → verifier (objects, compass directions, fists/degrees, clock times)
 └─ Service worker ─ caches the app, catalogue and the MediaPipe runtime
-Server: static Next.js pages + one small /api/waitlist route. No location or question ever leaves the device
+Android app ─ a Trusted Web Activity (android/, built with Bubblewrap): the same app running in Chrome's engine,
+               full screen via Digital Asset Links (public/.well-known/assetlinks.json)
+Server: static Next.js pages only. No location or question ever leaves the device
 (except the optional cloud forecast request to Open-Meteo, which sends only rounded coordinates).
 ```
 
@@ -58,7 +63,8 @@ Gemma runs in Chrome or Edge with WebGPU (desktop), and on recent phones with en
 - Distances and ages of named stars are published estimates and are shown as such.
 - Voice input uses the browser's speech recognition, which usually needs a connection. Typing works fully offline, and spoken answers use on-device voices.
 - Rise alerts fire while Luna is open in a tab or installed as an app. There is no push server.
-- The waitlist endpoint validates emails but does not store them yet.
+- The Android APK is signed with our own key and installed from the site, not the Play Store, so Android asks you to allow the install. iPhone apps can only be downloaded from the App Store, so on iPhone Luna installs from Safari as a home-screen web app.
+- Render's free plan sleeps when idle. The service worker serves the cached app after 3.5 seconds instead of waiting on a waking server, so the installed app still opens quickly.
 
 ## Credits and licences
 

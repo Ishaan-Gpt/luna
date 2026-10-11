@@ -18,12 +18,12 @@ export function Chrome() {
 
       {/* Nav */}
       <nav data-tone-target aria-label="Primary" className={`pointer-events-auto absolute right-[var(--gutter)] top-[clamp(18px,2.4vw,36px)] flex flex-col items-end gap-3 text-right ${tone}`}>
-        <a href="/sky" className="t-display group text-[clamp(20px,1.55vw,30px)] leading-[0.92]">
-          <span className="block">Open</span>
-          <span className="block border-b border-current pb-[0.1em]">Luna tonight</span>
+        <a href="/get" className="t-display group text-[clamp(20px,1.55vw,30px)] leading-[0.92]">
+          <span className="block">Get Luna</span>
+          <span className="block border-b border-current pb-[0.1em]">on your phone</span>
         </a>
         <div className="hidden flex-col items-end gap-1.5 sm:flex">
-          <a href="#waitlist" className="t-label ulink">Join the waitlist</a>
+          <a href="/sky" className="t-label ulink">Open in the browser</a>
           <a href="#reasons" className="t-label ulink">How it works</a>
         </div>
       </nav>

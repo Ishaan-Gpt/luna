@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { usePointing, type Pointing, type SensorState } from "@/lib/sensors";
 import { fmtTime } from "@/lib/sky";
+import { detectPlatform } from "@/lib/platform";
 import { Mark } from "../landing/primitives";
 import { useApp, type Tab } from "./store";
 import { GAsk, GMine, GPlaces, GSky, GTonight, GTorch } from "./ui";
@@ -25,6 +26,7 @@ export function Shell({ children }: { children: ReactNode }) {
   const { tab, setTab, loc, time, live, settings, update, online } = useApp();
   const sensor = usePointing(true);
   const [installEvt, setInstallEvt] = useState<Event | null>(null);
+  const [desktop] = useState(() => detectPlatform().os === "desktop");
 
   useEffect(() => {
     const h = (e: Event) => {
@@ -49,6 +51,11 @@ export function Shell({ children }: { children: ReactNode }) {
             <Mark size={30} />
             <span className="t-display text-[22px] leading-none">Luna</span>
           </Link>
+          {desktop && (
+            <a href="/get" className="pointer-events-auto t-label hidden items-center gap-2 rounded-full border border-star/20 px-4 py-2 text-star/70 hover:border-star/50 hover:text-star md:inline-flex">
+              Computer preview · <span className="text-torch">get Luna on your phone</span>
+            </a>
+          )}
           <div className="pointer-events-auto flex items-center gap-2">
             <button onClick={() => setTab("mine")} className="text-right leading-tight" aria-label="Place and time, change in Mine">
               <span className="t-label block text-star/85">{loc.name}</span>

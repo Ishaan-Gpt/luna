@@ -102,7 +102,7 @@ export function Hero() {
 
           {/* call to action and the honest caption */}
           <div data-hero="ctn" data-hero-fade className="absolute bottom-[5vh] left-1/2 -translate-x-1/2">
-            <CircleButton href="/sky" tone="star" size={150}>Open Luna tonight</CircleButton>
+            <CircleButton href="/get" tone="star" size={150}>Get Luna tonight</CircleButton>
           </div>
           <p data-hero="ctn" data-hero-fade className="t-label absolute bottom-[6vh] left-[calc(var(--gutter)+120px)] max-w-[22ch] text-star/60 max-lg:hidden">
             {mode === "dark" ? "Real sky · tonight 20:30 · Hanle · facing southwest" : "Same sky · same minute · under city lights"}

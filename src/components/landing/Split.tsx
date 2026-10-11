@@ -33,7 +33,7 @@ export function Split() {
           A red-light screen that protects the twenty minutes your eyes need to adjust to the dark. Answers spoken aloud, so the phone can stay in your pocket. Tonight&rsquo;s sky as a lock screen you read without unlocking.
         </p>
         <div data-reveal="ctn">
-          <CircleButton href="/sky" size={150}>Open Luna tonight</CircleButton>
+          <CircleButton href="/get" size={150}>Get Luna tonight</CircleButton>
         </div>
       </div>
     </section>

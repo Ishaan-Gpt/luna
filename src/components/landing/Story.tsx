@@ -24,8 +24,8 @@ export function Quote() {
 /** What Luna is, said once, plainly, between moonflowers. */
 export function Concept() {
   return (
-    <section data-bg="light" className="relative overflow-hidden bg-paper pb-[18vh] pt-[24vh] text-ink max-lg:pt-[18vh]">
-      <div data-drift="70" className="pointer-events-none absolute -left-[6vw] top-[16vh] w-[30vw] max-lg:top-[4vh] max-lg:w-[56vw]">
+    <section data-bg="light" className="relative overflow-hidden bg-paper pb-[18vh] pt-[24vh] text-ink max-lg:pt-[22vh]">
+      <div data-drift="70" className="pointer-events-none absolute -left-[6vw] top-[16vh] w-[30vw] max-lg:-left-[14vw] max-lg:-top-[4vh] max-lg:w-[40vw] max-lg:opacity-70">
         <VineA className="h-auto w-full" />
       </div>
       <div data-drift="-60" className="pointer-events-none absolute -bottom-[8vw] -right-[6vw] w-[36vw] max-lg:w-[64vw]">

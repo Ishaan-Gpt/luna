@@ -11,6 +11,8 @@ import { TonightTab } from "./TonightTab";
 import { AskTab } from "./AskTab";
 import { PlacesTab } from "./PlacesTab";
 import { MineTab } from "./MineTab";
+import { GetLuna } from "../get/GetLuna";
+import { desktopPreviewChosen, detectPlatform } from "@/lib/platform";
 
 export function SkyApp() {
   return (
@@ -23,8 +25,12 @@ export function SkyApp() {
 function Root() {
   const { ready, settings, tab } = useApp();
   const [onboarded, setOnboarded] = useState(false);
+  // On a computer, say plainly that Luna is a phone app before offering the preview.
+  const [gate, setGate] = useState(() => detectPlatform().os === "desktop" && !desktopPreviewChosen());
   useRiseAlerts();
   useServiceWorker();
+
+  if (gate) return <GetLuna mode="gate" onPreview={() => setGate(false)} />;
 
   if (!ready) return <div className="fixed inset-0 grid place-items-center bg-night"><p className="t-label text-star/50">Opening the sky…</p></div>;
   const needsSetup = !onboarded && (!settings.loc || settings.limit === null);

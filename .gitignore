@@ -46,3 +46,22 @@ render.log
 public/mediapipe/
 qwen-result.txt
 prod.log
+
+# android TWA (secrets + build outputs; sources are committable)
+android/*.keystore
+android/*.jks
+android/keystore.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.kotlin/
+android/.idea/
+android/*.apk
+android/*.aab
+android/*.idsig
+android/app/release/
+android/**/.project
+android/**/.classpath
+android/**/.settings/
+android/**/bin/

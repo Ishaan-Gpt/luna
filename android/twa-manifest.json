@@ -1,0 +1,42 @@
+{
+  "packageId": "com.ishaangpt.luna",
+  "host": "luna-3zla.onrender.com",
+  "name": "Luna",
+  "launcherName": "Luna",
+  "display": "standalone",
+  "themeColor": "#081115",
+  "themeColorDark": "#081115",
+  "navigationColor": "#081115",
+  "navigationColorDark": "#081115",
+  "navigationDividerColor": "#081115",
+  "navigationDividerColorDark": "#081115",
+  "backgroundColor": "#081115",
+  "enableNotifications": true,
+  "startUrl": "/sky",
+  "iconUrl": "https://luna-3zla.onrender.com/icons/icon-512.png",
+  "maskableIconUrl": "https://luna-3zla.onrender.com/icons/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./luna-release.keystore",
+    "alias": "luna"
+  },
+  "appVersionCode": 1,
+  "appVersion": "1.0.0",
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://luna-3zla.onrender.com/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://luna-3zla.onrender.com/",
+  "minSdkVersion": 24,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}

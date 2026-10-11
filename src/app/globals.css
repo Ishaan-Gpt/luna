@@ -181,3 +181,5 @@ html.locked, html.locked body { overflow: hidden; }
 .skeleton { background: linear-gradient(90deg, rgba(243,241,234,.04) 25%, rgba(243,241,234,.09) 50%, rgba(243,241,234,.04) 75%); background-size: 200% 100%; animation: shimmer 1.8s linear infinite; }
 
 @media print { .preloader, .chrome { display: none !important; } }
+.chrome > a, .chrome > nav { transition: transform 0.6s var(--ease-out), opacity 0.4s var(--ease-out); }
+.chrome[data-hide] > a, .chrome[data-hide] > nav { transform: translateY(-140%); opacity: 0; pointer-events: none; }

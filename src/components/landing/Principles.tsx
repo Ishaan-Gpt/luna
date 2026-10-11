@@ -48,7 +48,7 @@ export function Principles() {
     <section id="open" ref={ref} className="relative">
       {/* the reason, said once */}
       <div data-bg="light" className="relative overflow-hidden bg-paper pb-[16vh] pt-[20vh] text-ink">
-        <div data-drift="60" className="pointer-events-none absolute -left-[7vw] top-[22vh] w-[28vw] max-lg:top-[4vh] max-lg:w-[56vw]">
+        <div data-drift="60" className="pointer-events-none absolute -left-[7vw] top-[22vh] w-[28vw] max-lg:-left-[14vw] max-lg:-top-[6vh] max-lg:w-[44vw] max-lg:opacity-70">
           <VineA className="h-auto w-full" />
         </div>
         <div className="gut relative mx-auto flex max-w-[74vw] flex-col items-center text-center max-lg:max-w-none" data-reveal-group>

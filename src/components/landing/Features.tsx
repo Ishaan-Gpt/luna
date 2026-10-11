@@ -90,7 +90,7 @@ export function Features() {
         </div>
         <div className="col-span-3 col-start-9 max-lg:order-3 max-lg:col-span-1 max-lg:col-start-1" data-reveal="ctn">
           <p data-f-swap className="t-body max-w-[32ch] text-ink/75">{f.body}</p>
-          <a href="/sky" className="pill t-label mt-7">Try it tonight</a>
+          <a href="/get" className="pill t-label mt-7">Get the app</a>
         </div>
       </div>
 

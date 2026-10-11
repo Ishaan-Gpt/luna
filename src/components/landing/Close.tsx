@@ -13,6 +13,12 @@ const CREDITS: [string, string, string][] = [
   ["Made in 2026", "Hacktoberfest", "https://dev.to/challenges/hacktoberfest-week1-2026-10-05"],
 ];
 
+const GET: [string, string, string][] = [
+  ["Android", "Download the app", "/get"],
+  ["iPhone", "Add it from Safari", "/get"],
+  ["Browser", "Open Luna now", "/sky"],
+];
+
 /** The open pieces Luna stands on, with their real licences. */
 export function Credits() {
   return (
@@ -38,45 +44,25 @@ export function Credits() {
   );
 }
 
-type FormState = "idle" | "sending" | "done" | "error";
-
 export function Footer() {
   const [night, setNight] = useState<Night | null>(null);
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState<FormState>("idle");
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const t = setTimeout(() => setNight(tonight(new Date(), HANLE)), 0);
     return () => clearTimeout(t);
   }, []);
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setState("sending");
-    setError("");
-    try {
-      const r = await fetch("/api/waitlist", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email }) });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.error ?? "Something went wrong. Try again?");
-      setState("done");
-    } catch (err) {
-      setState("error");
-      setError(err instanceof Error ? err.message : "Something went wrong. Try again?");
-    }
-  };
-
   const darkWindow = night?.darkStart && night.darkEnd ? `${fmtTime(night.darkStart, HANLE.tz)}—${fmtTime(night.darkEnd, HANLE.tz)}` : "--:--—--:--";
 
   return (
-    <footer id="waitlist">
+    <footer id="get">
       {/* call to action over first light */}
       <div data-bg="dark" className="relative h-[80vh] overflow-hidden bg-night text-star" data-parallax="w">
         <img src="/art/dawn-ridge.webp" alt="First light over the ridges, one bright planet still up" data-parallax="img" data-amount="8" className="absolute inset-0 h-[116%] w-full -translate-y-[7%] object-cover" />
         <div className="absolute inset-0 grid place-items-center text-center" data-reveal-group>
           <div>
             <p data-reveal="a" className="t-script text-[9vw] max-lg:text-[18vw]">see you tonight</p>
-            <a href="#join" className="t-label ulink mt-4 inline-block">Join the waitlist</a>
+            <a href="/get" className="t-label ulink mt-4 inline-block">Get Luna on your phone</a>
           </div>
         </div>
       </div>
@@ -87,31 +73,14 @@ export function Footer() {
           <p data-reveal="h" className="t-display tnum mt-[6vh] text-[11vw] leading-[0.82] max-lg:text-[17vw]">{darkWindow}</p>
           <p data-reveal="ctn" className="t-label mt-6 text-star/65">Tonight&rsquo;s truly dark hours · Hanle, Ladakh</p>
 
-          <form id="join" onSubmit={submit} noValidate className="mt-[9vh] flex w-full max-w-[520px] flex-col items-center gap-5" data-reveal="ctn">
-            {state === "done" ? (
-              <p className="t-display t-h6 max-lg:!text-[7vw]">You&rsquo;re on the list. Clear skies.</p>
-            ) : (
-              <>
-                <label htmlFor="wl-email" className="t-label text-star/70">One email, when Luna is ready for your phone</label>
-                <div className="flex w-full items-end gap-4 border-b border-star/40 pb-2 focus-within:border-star">
-                  <input
-                    id="wl-email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="t-body min-w-0 flex-1 bg-transparent py-2 text-[clamp(15px,1.1vw,18px)] text-star outline-none placeholder:text-star/35"
-                  />
-                  <button type="submit" disabled={state === "sending"} className="t-label shrink-0 py-2 disabled:opacity-60">
-                    {state === "sending" ? "Joining…" : "Join"}
-                  </button>
-                </div>
-                <p role="status" className="t-label min-h-[1.4em] text-torch">{state === "error" ? error : ""}</p>
-              </>
-            )}
-          </form>
+          <div className="mt-[9vh] grid w-full max-w-[860px] gap-px overflow-hidden rounded-[22px] border border-star/15 bg-star/15 sm:grid-cols-3" data-reveal="ctn">
+            {GET.map(([k, v, href]) => (
+              <a key={k} href={href} className="group flex flex-col items-center gap-2 bg-ember px-6 py-8 transition-colors hover:bg-[#3a1419]">
+                <span className="t-display t-h6 max-lg:!text-[8vw]">{k}</span>
+                <span className="t-label text-star/60 group-hover:text-star">{v}</span>
+              </a>
+            ))}
+          </div>
         </div>
 
         <div className="gut mt-[12vh] flex flex-wrap items-end justify-between gap-6 border-t border-star/15 pt-6">

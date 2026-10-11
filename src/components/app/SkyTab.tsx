@@ -188,7 +188,7 @@ export function SkyTab() {
             <GCompass size={16} /> {follow ? (pointer.state === "live" ? "Following your phone" : pointer.state === "denied" ? "Compass blocked" : "Waiting for compass…") : "Point your phone at the sky"}
           </button>
         ) : (
-          <p className="t-label text-star/45">Drag to look around · scroll to zoom</p>
+          <p className="t-label text-center text-star/45">No compass on this device · drag to look around, scroll to zoom</p>
         )}
       </div>
 

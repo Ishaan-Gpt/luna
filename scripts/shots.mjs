@@ -44,11 +44,20 @@ await send("Page.enable");
 if (process.env.SHOT_INIT) await send("Page.addScriptToEvaluateOnNewDocument", { source: process.env.SHOT_INIT });
 await send("Runtime.enable");
 await send("Emulation.setDeviceMetricsOverride", { width: +W, height: +H, deviceScaleFactor: 1, mobile: +W < 600 });
+// SHOT_UA=android|ios pretends to be that phone (user agent + touch), for platform-specific screens.
+const UAS = {
+  android: "Mozilla/5.0 (Linux; Android 15; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36",
+  ios: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1",
+};
+if (process.env.SHOT_UA) {
+  await send("Emulation.setUserAgentOverride", { userAgent: UAS[process.env.SHOT_UA] ?? process.env.SHOT_UA });
+  await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+}
 await fs.mkdir(outDir, { recursive: true });
 
 async function shoot(y, name) {
   const [base, hash] = URL_.split("#");
-  await send("Page.navigate", { url: `${base}?shot=${y}${hash ? `#${hash}` : ""}` });
+  await send("Page.navigate", { url: `${base}${base.includes("?") ? "&" : "?"}shot=${y}${hash ? `#${hash}` : ""}` });
   await sleep(Number(process.env.SHOT_WAIT ?? 4200));
   if (process.env.SHOT_OFFLINE) {
     // first visit done: now cut the network and reload, like airplane mode

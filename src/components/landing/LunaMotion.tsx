@@ -48,6 +48,22 @@ export function LunaMotion() {
     cleanups.push(initReveals());
     cleanups.push(initParallax());
 
+    // Phones: the fixed emblem and nav would sit on top of the copy, so they step aside while
+    // you scroll down and come back the moment you scroll up (or reach the top).
+    const chrome = document.querySelector<HTMLElement>(".chrome");
+    if (chrome) {
+      let last = window.scrollY;
+      const onScroll = () => {
+        const y = window.scrollY;
+        const phone = window.innerWidth < 1024;
+        if (!phone || y < 120 || y < last - 4) delete chrome.dataset.hide;
+        else if (y > last + 4) chrome.dataset.hide = "";
+        last = y;
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      cleanups.push(() => window.removeEventListener("scroll", onScroll));
+    }
+
     // Emblem ring: always turning, faster and in the scroll direction while scrolling
     const ring = document.querySelector<HTMLElement>("[data-emblem-ring]");
     if (ring && !reduce) {

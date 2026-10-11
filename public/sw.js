@@ -1,6 +1,6 @@
 // Luna's service worker: keeps the app, its star catalogue and the on-device AI runtime available offline.
 // Models themselves live in the "luna-models-v1" cache, written by the app.
-const V = "luna-shell-v2";
+const V = "luna-shell-v3";
 const CORE = [
   "/sky",
   "/manifest.webmanifest",
@@ -31,15 +31,24 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin && url.hostname !== "fonts.gstatic.com") return; // forecasts and model downloads go straight to the network
 
+  // Pages: network first, but never wait more than a few seconds on a slow or sleeping server
+  // when a cached copy exists. The network copy still refreshes the cache in the background.
   if (req.mode === "navigate") {
+    const net = fetch(req).then((res) => {
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(V).then((c) => c.put(req, copy));
+      }
+      return res;
+    });
+    e.waitUntil(net.catch(() => null));
     e.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(V).then((c) => c.put(req, copy));
-          return res;
-        })
-        .catch(async () => (await caches.match(req)) || (await caches.match("/sky")) || Response.error()),
+      (async () => {
+        const cached = (await caches.match(req)) || (url.pathname.startsWith("/sky") ? await caches.match("/sky") : null);
+        if (!cached) return net.catch(() => Response.error());
+        const slow = new Promise((r) => setTimeout(() => r(cached), 3500));
+        return Promise.race([net.then((r) => (r.ok ? r : cached), () => cached), slow]);
+      })(),
     );
     return;
   }
