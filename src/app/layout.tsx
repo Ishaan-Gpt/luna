@@ -1,32 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, Hanken_Grotesk, Martian_Mono } from "next/font/google";
+import { Archivo, Mrs_Saint_Delafield, Noto_Serif_Display } from "next/font/google";
 import "./globals.css";
 
-const bodoni = Bodoni_Moda({ variable: "--font-bodoni", subsets: ["latin"], style: ["normal", "italic"], display: "swap" });
-const hanken = Hanken_Grotesk({ variable: "--font-hanken", subsets: ["latin"], display: "swap" });
-const martian = Martian_Mono({ variable: "--font-martian", subsets: ["latin"], display: "swap" });
+// Towering condensed Didone for display, a formal script for the turn, an expanded grotesk for labels and body.
+const display = Noto_Serif_Display({ variable: "--font-display", subsets: ["latin"], axes: ["wdth"], style: ["normal", "italic"], display: "swap" });
+const script = Mrs_Saint_Delafield({ variable: "--font-script", subsets: ["latin"], weight: "400", display: "swap" });
+const sans = Archivo({ variable: "--font-sans", subsets: ["latin"], axes: ["wdth"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Luna · Know every star above you, even with no signal",
+  title: "Luna · The night sky, named. Even with no signal.",
   description:
-    "Luna names the stars, planets and constellations over your head from GPS and your phone's sensors, works fully offline, and tells you when and where the sky is darkest.",
-  openGraph: {
-    title: "Luna",
-    description: "Look up. Luna knows who's there. A sky guide that works with no signal.",
-    type: "website",
-  },
+    "Luna is a night-sky guide that runs on an open model inside your phone. Point it at the sky, ask what you're seeing, then put it away. Works offline.",
+  openGraph: { title: "Luna", description: "Look up. Luna knows who's there, even with no signal.", type: "website" },
 };
 
-export const viewport: Viewport = { themeColor: "#0a1211", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#081115", colorScheme: "dark" };
 
-// Decide before first paint whether the intro plays (once per session, never with reduced motion).
-const introScript = `(function(){var d=document.documentElement;try{var r=matchMedia('(prefers-reduced-motion: reduce)').matches;d.dataset.intro=(r||sessionStorage.getItem('luna-intro'))?'done':'playing'}catch(e){d.dataset.intro='done'}})()`;
+// Before first paint: decide whether the moonrise preloader plays (once per session, never with reduced motion),
+// and mark that JS is running so reveal targets can start hidden. A timer unhides them if motion never boots.
+const boot = `(function(){var d=document.documentElement;d.classList.add('js');try{var r=matchMedia('(prefers-reduced-motion: reduce)').matches;d.dataset.intro=(r||/[?&]shot=/.test(location.search))?'none':(sessionStorage.getItem('luna-intro')?'short':'long')}catch(e){d.dataset.intro='none'}setTimeout(function(){d.classList.add('motion-fallback')},6000)})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${bodoni.variable} ${hanken.variable} ${martian.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${display.variable} ${script.variable} ${sans.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: introScript }} />
+        <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
       <body>{children}</body>
     </html>

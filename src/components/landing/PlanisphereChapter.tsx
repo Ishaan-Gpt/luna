@@ -2,11 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useMotionValue, useMotionValueEvent, useSpring } from "motion/react";
-import { useSky } from "@/lib/sky-context";
-import { fmtLat, lst, norm360, tzOffset } from "@/lib/sky";
-import { LINES, STARS, STAR_BY_ID } from "@/lib/stars";
-import { Reveal, SectionHeading } from "../motion-bits";
-import { IconClock } from "../icons";
+import { fmtLat, HANLE, lst, norm360, tzOffset } from "@/lib/sky";
+import { LINES, STARS } from "@/lib/stars";
 
 const D2R = Math.PI / 180;
 const C = 300; // centre of the 600 viewBox
@@ -23,8 +20,13 @@ const raMidnight = (doy: number) => norm360((doy - 80) * (360 / 365.25) + 180);
  * A working planisphere for the current latitude. The star disc turns under a fixed mask whose
  * window is the real horizon; the date ring on the disc lines up with the hour ring on the mask.
  */
-export function Planisphere() {
-  const { loc, now } = useSky();
+export function PlanisphereChapter() {
+  const loc = HANLE;
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    const t = setTimeout(() => setNow(new Date()), 0);
+    return () => clearTimeout(t);
+  }, []);
   const s = loc.lat >= 0 ? 1 : -1; // southern skies centre on the south pole and mirror
   const phi = Math.max(10, Math.abs(loc.lat));
   const decMin = phi - 90 - 4;
@@ -120,28 +122,28 @@ export function Planisphere() {
   }, [lstDeg, now, loc.lon, loc.tz]);
 
   return (
-    <section className="relative z-10 mt-36 px-4 sm:px-6 md:mt-52">
-      <div className="mx-auto grid max-w-[1240px] items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-        <div>
-          <SectionHeading plain="The oldest sky app" italic="still fits in your hand." align="left" className="!text-[clamp(2.3rem,3.7vw,3.7rem)]" />
-          <Reveal>
-            <p className="mt-6 max-w-[460px] text-[1.05rem] leading-relaxed text-star-2">
-              Long before phones, people found stars with a planisphere: a star disc that turns under a window shaped like the horizon. Our mark is one. This one works, drawn for {fmtLat(loc.lat)}. Drag the sky to turn it.
+    <section className="relative">
+      <div data-bg="light" className="gut relative z-10 bg-paper pt-[18vh] text-ink">
+        <h2 data-fit data-reveal="h" className="t-display -mb-[4.4vw] text-[14vw] leading-[0.8]">Planisphere</h2>
+      </div>
+      <div data-bg="dark" className="relative bg-night pb-[14vh] pt-[14vh] text-star">
+        <div className="gut grid grid-cols-12 items-center gap-6 max-lg:grid-cols-1">
+          <div className="col-span-4 col-start-2 max-lg:col-span-1 max-lg:col-start-1" data-reveal-group>
+            <h3 data-reveal="h" className="t-display t-h5 max-w-[14ch]">The oldest sky app still fits in your hand</h3>
+            <p data-reveal="p" className="t-body mt-6 max-w-[38ch] text-star/75">
+              Long before phones, people found stars with a planisphere: a star disc that turns under a window shaped like the horizon. Luna&rsquo;s mark is one. This one works, drawn for {fmtLat(loc.lat)}. Drag the sky to turn it, then print one for your own latitude.
             </p>
-            <div className="glass mt-8 inline-flex items-center gap-5 rounded-[20px] p-4 pr-5">
-              <span className="grid h-11 w-11 place-items-center rounded-xl glass-inset text-torch-ink"><IconClock size={22} /></span>
+            <div data-reveal="ctn" className="mt-10 flex flex-wrap items-end gap-8">
               <div>
-                <p className="text-[0.8rem] text-star-3">{reading ? `On ${reading.date}, this is the sky at` : "Turn the disc"}</p>
-                <p className="mono text-[1.5rem] tnum">{reading?.label ?? "--:--"}</p>
+                <p className="t-label text-star/60">{reading ? `On ${reading.date}, the sky at` : "Turn the disc"}</p>
+                <p className="t-display tnum mt-2 text-[4.4vw] leading-none max-lg:text-[14vw]">{reading?.label ?? "--:--"}</p>
               </div>
-              <button onClick={toNow} className="btn-ghost !h-10 !px-3 text-[0.85rem]">Back to now</button>
+              <button onClick={toNow} className="pill t-label">Back to now</button>
             </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.1}>
-          <div className="relative mx-auto w-full max-w-[620px]">
-            <svg
+          </div>
+          <div className="col-span-6 col-start-7 max-lg:col-span-1 max-lg:col-start-1" data-reveal="ctn">
+            <div className="relative mx-auto w-full max-w-[640px]">
+              <svg
               ref={svg}
               viewBox="0 0 600 600"
               className="h-auto w-full cursor-grab touch-none select-none active:cursor-grabbing"
@@ -178,29 +180,29 @@ export function Planisphere() {
 
               {/* Star disc */}
               <motion.g style={{ rotate: svgRot, originX: 0.5, originY: 0.5 }}>
-                <circle cx={C} cy={C} r={RD} fill="url(#ps-disc)" stroke="var(--brass)" strokeOpacity=".5" />
-                <circle cx={C} cy={C} r={RC + 4} fill="none" stroke="var(--brass)" strokeOpacity=".5" />
-                <g stroke="var(--brass)" strokeOpacity=".14" fill="none">
+                <circle cx={C} cy={C} r={RD} fill="url(#ps-disc)" stroke="#c9b98f" strokeOpacity=".5" />
+                <circle cx={C} cy={C} r={RC + 4} fill="none" stroke="#c9b98f" strokeOpacity=".5" />
+                <g stroke="#c9b98f" strokeOpacity=".14" fill="none">
                   <path d={art.spokes} />
                   {art.circles.map((r) => <circle key={r} cx={C} cy={C} r={r} />)}
                 </g>
-                <path d={art.lines} stroke="var(--brass)" strokeOpacity=".55" strokeWidth="1" fill="none" />
+                <path d={art.lines} stroke="#c9b98f" strokeOpacity=".55" strokeWidth="1" fill="none" />
                 {art.stars.map((st) => {
                   const p = art.placed[st.id];
                   return <circle key={st.id} cx={p.x} cy={p.y} r={Math.max(0.9, 3.4 - st.mag * 0.7)} fill="#f4ecdc" />;
                 })}
-                <path d={art.ticks} stroke="var(--brass)" strokeWidth=".8" />
+                <path d={art.ticks} stroke="#c9b98f" strokeWidth=".8" />
                 {art.labels.map((l) => (
-                  <text key={l.t} x={l.x} y={l.y} transform={`rotate(${l.a} ${l.x} ${l.y})`} textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="var(--star-2)" className="mono">{l.t}</text>
+                  <text key={l.t} x={l.x} y={l.y} transform={`rotate(${l.a} ${l.x} ${l.y})`} textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="rgba(243,241,234,.72)" style={{ fontFamily: "var(--sans)", fontVariationSettings: '"wdth" 112' }}>{l.t}</text>
                 ))}
-                <text x={art.placed.polaris.x + 6} y={art.placed.polaris.y - 6} fontSize="10" fill="var(--star-3)">{s > 0 ? "Polaris" : ""}</text>
+                <text x={art.placed.polaris.x + 6} y={art.placed.polaris.y - 6} fontSize="10" fill="rgba(243,241,234,.5)">{s > 0 ? "Polaris" : ""}</text>
               </motion.g>
 
               {/* Mask with the horizon window */}
               <g mask="url(#ps-window)">
                 <circle cx={C} cy={C} r={RC + 4} fill="url(#ps-plate)" />
-                <circle cx={C} cy={C} r={RC + 4} fill="none" stroke="var(--brass)" strokeOpacity=".7" />
-                <text fontSize="11" letterSpacing="4" fill="var(--brass)" className="mono">
+                <circle cx={C} cy={C} r={RC + 4} fill="none" stroke="#c9b98f" strokeOpacity=".7" />
+                <text fontSize="11" letterSpacing="4" fill="#c9b98f" style={{ fontFamily: "var(--sans)", fontVariationSettings: '"wdth" 112' }}>
                   <textPath href="#ps-arc" startOffset="50%" textAnchor="middle">LUNA · {fmtLat(loc.lat).toUpperCase()}</textPath>
                 </text>
               </g>
@@ -208,22 +210,21 @@ export function Planisphere() {
               {/* Hour ring */}
               {hours.map((h) => (
                 <g key={h.h}>
-                  <line x1={h.t1.x} y1={h.t1.y} x2={h.t2.x} y2={h.t2.y} stroke="var(--brass)" />
+                  <line x1={h.t1.x} y1={h.t1.y} x2={h.t2.x} y2={h.t2.y} stroke="#c9b98f" />
                   {h.h % 2 === 0 && (
-                    <text x={h.x} y={h.y} textAnchor="middle" dominantBaseline="middle" fontSize="11" fill={h.h === 0 ? "var(--torch-ink)" : "var(--star-3)"} className="mono">
+                    <text x={h.x} y={h.y} textAnchor="middle" dominantBaseline="middle" fontSize="11" fill={h.h === 0 ? "#ff7a62" : "rgba(243,241,234,.5)"} style={{ fontFamily: "var(--sans)", fontVariationSettings: '"wdth" 112' }}>
                       {String(h.h).padStart(2, "0")}
                     </text>
                   )}
                 </g>
               ))}
-              <circle cx={C} cy={C} r="5" fill="var(--night)" stroke="var(--brass)" />
+              <circle cx={C} cy={C} r="5" fill="var(--night)" stroke="#c9b98f" />
               <path d="M300 296.6c.2 1.6.7 2.4 2.8 2.8-2.1.4-2.6 1.2-2.8 2.8-.2-1.6-.7-2.4-2.8-2.8 2.1-.4 2.6-1.2 2.8-2.8z" fill="var(--torch)" />
             </svg>
-            <p className="mt-2 text-center text-[0.78rem] text-star-3">
-              {STAR_BY_ID.polaris && s > 0 ? "The pivot is the north celestial pole, right beside Polaris." : "The pivot is the south celestial pole."}
-            </p>
+              <p className="t-label mt-4 text-center text-star/50">Drawn for {fmtLat(loc.lat)} · the pivot is the north celestial pole, beside Polaris</p>
+            </div>
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

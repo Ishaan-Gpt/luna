@@ -260,7 +260,7 @@ export function rng(seed: number) {
 /** Faint texture stars (not catalogue stars) fixed on the celestial sphere, plus Milky Way haze points. */
 export const DUST = (() => {
   const r = rng(42);
-  return Array.from({ length: 1100 }, () => {
+  return Array.from({ length: 2600 }, () => {
     const ra = r() * 360;
     const dec = Math.asin(2 * r() - 1) * R2D;
     return { ra, dec, mag: 3.6 + r() * 2.6 };

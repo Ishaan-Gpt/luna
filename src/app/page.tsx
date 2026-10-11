@@ -1,37 +1,41 @@
-import { SkyProvider } from "@/lib/sky-context";
-import { SkyBackdrop } from "@/components/SkyBackdrop";
-import { Intro } from "@/components/Intro";
-import { Nav } from "@/components/Nav";
-import { SmoothScroll } from "@/components/SmoothScroll";
-import { Hero } from "@/components/sections/Hero";
-import { Story } from "@/components/sections/Story";
-import { Offline } from "@/components/sections/Offline";
-import { Tonight } from "@/components/sections/Tonight";
-import { Places } from "@/components/sections/Places";
-import { Yours } from "@/components/sections/Yours";
-import { AnyNight } from "@/components/sections/AnyNight";
-import { Planisphere } from "@/components/sections/Planisphere";
-import { Dawn } from "@/components/sections/Dawn";
+import { Chrome } from "@/components/landing/Chrome";
+import { Credits, Footer } from "@/components/landing/Close";
+import { Features } from "@/components/landing/Features";
+import { Hero } from "@/components/landing/Hero";
+import { Horizon } from "@/components/landing/Horizon";
+import { LunaMotion } from "@/components/landing/LunaMotion";
+import { Moonrise } from "@/components/landing/Moonrise";
+import { PlanisphereChapter } from "@/components/landing/PlanisphereChapter";
+import { Preloader } from "@/components/landing/Preloader";
+import { Principles } from "@/components/landing/Principles";
+import { Reasons } from "@/components/landing/Reasons";
+import { SkyPins } from "@/components/landing/SkyPins";
+import { Split } from "@/components/landing/Split";
+import { Concept, Darker, Quote } from "@/components/landing/Story";
 
 export default function Home() {
   return (
-    <SkyProvider>
-      <Intro />
-      <SmoothScroll />
-      <SkyBackdrop />
-      <div className="grain" aria-hidden />
-      <Nav />
-      <main className="relative z-10 overflow-x-clip">
+    <>
+      <Preloader />
+      <Chrome />
+      <main className="relative">
         <Hero />
-        <Story />
-        <Offline />
-        <Tonight />
-        <Places />
-        <Yours />
-        <AnyNight />
-        <Planisphere />
-        <Dawn />
+        <Moonrise />
+        <Reasons />
+        <Quote />
+        <Concept />
+        <Darker />
+        <Horizon />
+        <SkyPins />
+        <Features />
+        <Principles />
+        <Split />
+        <PlanisphereChapter />
+        <Credits />
       </main>
-    </SkyProvider>
+      <Footer />
+      {/* last, so every section has registered its own scroll work first */}
+      <LunaMotion />
+    </>
   );
 }
