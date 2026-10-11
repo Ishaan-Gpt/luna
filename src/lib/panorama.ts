@@ -1,6 +1,7 @@
-import { DUST, MILKY, eqToHor, lst, moonAltAz, moonInfo, planetsAltAz, precessor, sunAltAz, type Loc } from "./sky";
+import { MILKY, eqToHor, lst, moonAltAz, moonInfo, planetsAltAz, precessor, sunAltAz, type Loc } from "./sky";
 import { LINES, STARS } from "./stars";
 import { TINT, drawMoon, drawStar, glow, rgb, skyColors } from "./draw";
+import { TINTS, type Catalog } from "./catalog";
 
 const D2R = Math.PI / 180;
 
@@ -29,7 +30,7 @@ export function projector(w: number, h: number, az0Deg: number, alt0Deg: number,
   };
 }
 
-type Opts = { date: Date; loc: Loc; mode: SkyMode; az0?: number; alt0?: number; vfov?: number; lines?: boolean; paintBg?: boolean };
+type Opts = { date: Date; loc: Loc; mode: SkyMode; az0?: number; alt0?: number; vfov?: number; lines?: boolean; paintBg?: boolean; catalog?: Catalog | null };
 
 /**
  * Paint a photographic view of the real sky. Dark mode is a dark-site night with the Milky Way;
@@ -101,19 +102,21 @@ export function drawPanorama(ctx: CanvasRenderingContext2D, w: number, h: number
     ctx.globalAlpha = 1;
   }
 
-  // Faint field
-  ctx.fillStyle = "#efe8da";
-  for (const d of DUST) {
-    if (d.mag > limit) continue;
-    const p = hor(d.ra, d.dec);
-    if (p.alt < 1) continue;
-    const q = project(p.alt, p.az);
-    if (!q) continue;
-    ctx.globalAlpha = Math.min(1, (limit - d.mag) / 1.4) * 0.7 * Math.min(1, p.alt / 8);
-    const sz = d.mag < 4.4 ? 1.4 : 0.95;
-    ctx.fillRect(q.x, q.y, sz, sz);
+  // Faint field: real Hipparcos stars from the catalogue, once it has loaded
+  if (o.catalog) {
+    for (const [ra, dec, mag, tint] of o.catalog.stars) {
+      if (mag < 2.2 || mag > limit) continue;
+      const p = hor(ra, dec);
+      if (p.alt < 1) continue;
+      const q = project(p.alt, p.az);
+      if (!q) continue;
+      ctx.globalAlpha = Math.min(1, (limit - mag) / 1.4 + 0.25) * Math.min(1, p.alt / 8);
+      ctx.fillStyle = TINTS[tint];
+      const sz = mag < 3.5 ? 1.6 : mag < 4.6 ? 1.2 : 0.9;
+      ctx.fillRect(q.x, q.y, sz, sz);
+    }
+    ctx.globalAlpha = 1;
   }
-  ctx.globalAlpha = 1;
 
   // Catalogue stars + stick figures
   const placed: Placed[] = [];

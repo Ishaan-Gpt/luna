@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { drawPanorama, type Placed, type SkyMode } from "@/lib/panorama";
 import { setupCanvas } from "@/lib/draw";
 import { HANLE, ymd, zoned, type Loc } from "@/lib/sky";
+import { useCatalog } from "@/lib/catalog";
 
 /** Tonight at the given local time (default 20:30) at a place, as a Date. Call after mount. */
 export function tonightAt(loc: Loc, hour = 20, minute = 30) {
@@ -23,6 +24,7 @@ export function HeroSky({ mode, loc = HANLE, onPlaced, az0 = 228, alt0 = 36, vfo
   const dark = useRef<HTMLCanvasElement>(null);
   const city = useRef<HTMLCanvasElement>(null);
   const [painted, setPainted] = useState(false);
+  const catalog = useCatalog();
 
   useEffect(() => {
     const paint = () => {
@@ -31,7 +33,7 @@ export function HeroSky({ mode, loc = HANLE, onPlaced, az0 = 228, alt0 = 36, vfo
       const w = el.clientWidth;
       const h = el.clientHeight;
       const date = tonightAt(loc);
-      const opts = { date, loc, az0, alt0, vfov };
+      const opts = { date, loc, az0, alt0, vfov, catalog };
       const placed = drawPanorama(setupCanvas(dark.current, w, h), w, h, { ...opts, mode: "dark" });
       drawPanorama(setupCanvas(city.current, w, h), w, h, { ...opts, mode: "city" });
       onPlaced?.(placed, { w, h });
@@ -49,7 +51,7 @@ export function HeroSky({ mode, loc = HANLE, onPlaced, az0 = 228, alt0 = 36, vfo
       clearTimeout(rt);
       window.removeEventListener("resize", onResize);
     };
-  }, [loc, az0, alt0, vfov, onPlaced]);
+  }, [loc, az0, alt0, vfov, onPlaced, catalog]);
 
   return (
     <div ref={wrap} className={`absolute inset-0 ${className}`}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { DUST, MILKY, eqToHor, lst, precessor, moonAltAz, moonInfo, planetsAltAz, sunAltAz, type Loc } from "@/lib/sky";
+import { MILKY, eqToHor, lst, precessor, moonAltAz, moonInfo, planetsAltAz, sunAltAz, type Loc } from "@/lib/sky";
 import { LINES, STARS, STAR_BY_ID } from "@/lib/stars";
 import { TINT, darkness, drawMoon, drawStar, fam, glow, rgb, setupCanvas, skyColors } from "@/lib/draw";
 
@@ -107,19 +107,6 @@ export function SkyDial({
     }
     ctx.setLineDash([]);
 
-    // Faint field
-    const limit = -1.5 + vis * 7.2;
-    ctx.fillStyle = "#efe8da";
-    for (const d of DUST) {
-      if (d.mag > limit - 0.4) continue;
-      const p = hor(d.ra, d.dec);
-      if (p.alt < 0) continue;
-      const q = project(p.alt, p.az);
-      ctx.globalAlpha = Math.min(1, (limit - d.mag) / 1.6) * 0.45;
-      ctx.fillRect(q.x, q.y, 1, 1);
-    }
-    ctx.globalAlpha = 1;
-
     // Stars
     const placed = new Map<string, { x: number; y: number; alt: number }>();
     for (const s of STARS) {
@@ -137,6 +124,7 @@ export function SkyDial({
     }
     ctx.stroke();
 
+    const limit = -1.5 + vis * 7.2;
     const k = Math.max(0.75, W / 480);
     hits.current = [];
     for (const s of STARS) {
