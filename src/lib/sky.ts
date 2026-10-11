@@ -72,7 +72,11 @@ export function planetsAltAz(date: Date, l: Loc) {
 export type PlacedStar = Star & AltAz;
 export function placeStars(date: Date, l: Loc, stars: Star[] = STARS): PlacedStar[] {
   const t = lst(date, l.lon);
-  return stars.map((s) => ({ ...s, ...eqToHor(s.ra, s.dec, l.lat, t) }));
+  const P = precessor(date);
+  return stars.map((s) => {
+    const p = P(s.ra, s.dec);
+    return { ...s, ...eqToHor(p.ra, p.dec, l.lat, t) };
+  });
 }
 
 /** The catalogue star closest to the zenith. */
@@ -186,7 +190,7 @@ export function upcomingEvents(now: Date, l: Loc, count = 6): SkyEvent[] {
   out.push({
     date: le.peak.date,
     title: `${cap(le.kind)} lunar eclipse`,
-    detail: leAlt > 0 ? `The Moon will be ${Math.round(leAlt)}° up from ${l.name} at peak.` : `The Moon is below your horizon at peak. Nebua will show where to go.`,
+    detail: leAlt > 0 ? `The Moon will be ${Math.round(leAlt)}° up from ${l.name} at peak.` : `The Moon is below your horizon at peak. Luna will show where to go.`,
     kind: "eclipse",
   });
   // Solar eclipse
@@ -199,8 +203,8 @@ export function upcomingEvents(now: Date, l: Loc, count = 6): SkyEvent[] {
   });
   // Meteor showers (next peak of each)
   for (const s of SHOWERS) {
-    let d = new Date(Date.UTC(now.getUTCFullYear(), s.m, s.d, 20));
-    if (d.getTime() < now.getTime() - DAY) d = new Date(Date.UTC(now.getUTCFullYear() + 1, s.m, s.d, 20));
+    let d = new Date(Date.UTC(now.getUTCFullYear(), s.m, s.d, 12));
+    if (d.getTime() < now.getTime() - DAY) d = new Date(Date.UTC(now.getUTCFullYear() + 1, s.m, s.d, 12));
     const moon = Math.round(moonInfo(d).fraction * 100);
     out.push({ date: d, title: `${s.name} peak`, detail: `${cap(s.rate)}. Moon ${moon}% lit that night.`, kind: "meteor" });
   }
@@ -298,4 +302,52 @@ export function twilightName(sunAlt: number) {
   if (sunAlt > -12) return "Nautical twilight";
   if (sunAlt > -18) return "Astronomical twilight";
   return "True dark";
+}
+
+/* ---------- time zones ---------- */
+/** Minutes the zone is ahead of UTC at that instant. */
+export function tzOffset(date: Date, tz: string) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", { timeZone: tz, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" })
+      .formatToParts(date)
+      .map((p) => [p.type, p.value]),
+  );
+  const asUTC = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour % 24, +parts.minute, +parts.second);
+  return Math.round((asUTC - date.getTime()) / 60000);
+}
+/** A wall-clock time in a zone, as a Date. */
+export function zoned(y: number, m: number, d: number, h: number, min: number, tz: string) {
+  const guess = Date.UTC(y, m, d, h, min);
+  return new Date(guess - tzOffset(new Date(guess), tz) * 60000);
+}
+/** yyyy-mm-dd of an instant, in a zone. */
+export function ymd(date: Date, tz: string) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
+}
+export function nextNewMoon(from: Date) {
+  let q = A.SearchMoonQuarter(from);
+  while (q.quarter !== 0) q = A.NextMoonQuarter(q);
+  return q.time.date;
+}
+
+/* ---------- precession ---------- */
+/**
+ * J2000 catalogue → equator of date (precession + nutation). Tiny today (~0.4°),
+ * but essential for "any year": a thousand years moves the pole star noticeably.
+ */
+export function precessor(date: Date) {
+  const m = A.Rotation_EQJ_EQD(date).rot;
+  return (ra: number, dec: number) => {
+    const r = ra * D2R, d = dec * D2R;
+    const x = Math.cos(d) * Math.cos(r), y = Math.cos(d) * Math.sin(r), z = Math.sin(d);
+    const X = m[0][0] * x + m[1][0] * y + m[2][0] * z;
+    const Y = m[0][1] * x + m[1][1] * y + m[2][1] * z;
+    const Z = m[0][2] * x + m[1][2] * y + m[2][2] * z;
+    return { ra: norm360(Math.atan2(Y, X) * R2D), dec: Math.asin(Math.max(-1, Math.min(1, Z))) * R2D };
+  };
+}
+/** eqToHor for a J2000 position at a given instant. */
+export function j2000ToHor(ra: number, dec: number, date: Date, l: { lat: number; lon: number }, P = precessor(date)) {
+  const p = P(ra, dec);
+  return eqToHor(p.ra, p.dec, l.lat, lst(date, l.lon));
 }

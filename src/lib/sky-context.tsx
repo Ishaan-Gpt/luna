@@ -54,8 +54,8 @@ export function SkyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const t = setTimeout(() => {
       setNow(new Date());
-      setMarks(read("nebua-marks", ["vega"]));
-      setNicknames(read("nebua-nicknames", {}));
+      setMarks(read("luna-marks", ["vega"]));
+      setNicknames(read("luna-nicknames", {}));
     }, 0);
     const i = setInterval(() => setNow(new Date()), 30000);
     return () => {
@@ -64,12 +64,12 @@ export function SkyProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const night = useMemo(() => (now ? tonight(now, loc) : null), [loc, now?.getHours()]); // eslint-disable-line react-hooks/exhaustive-deps
+  const hourKey = now ? now.getHours() : null;
+  const night = useMemo(() => (now ? tonight(now, loc) : null), [loc, hourKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Cloud cover, when there is a signal. The sky maths above never needs one.
   useEffect(() => {
     const ctrl = new AbortController();
-    setWeatherState("loading");
     const lat = loc.lat.toFixed(1);
     const lon = loc.lon.toFixed(1);
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=cloud_cover&current=cloud_cover,temperature_2m&forecast_days=2&timezone=UTC`, { signal: ctrl.signal })
@@ -90,6 +90,7 @@ export function SkyProvider({ children }: { children: ReactNode }) {
     setGeo("asking");
     navigator.geolocation.getCurrentPosition(
       (p) => {
+        setWeatherState("loading");
         setLoc({
           name: "Your location",
           lat: p.coords.latitude,
@@ -106,6 +107,7 @@ export function SkyProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetLocation = useCallback(() => {
+    setWeatherState("loading");
     setLoc(HANLE);
     setGeo("idle");
   }, []);
@@ -113,7 +115,7 @@ export function SkyProvider({ children }: { children: ReactNode }) {
   const toggleMark = useCallback((id: string) => {
     setMarks((m) => {
       const next = m.includes(id) ? m.filter((x) => x !== id) : [...m, id];
-      write("nebua-marks", next);
+      write("luna-marks", next);
       return next;
     });
   }, []);
@@ -122,7 +124,7 @@ export function SkyProvider({ children }: { children: ReactNode }) {
     setNicknames((n) => {
       const next = { ...n, [id]: name.slice(0, 28) };
       if (!name.trim()) delete next[id];
-      write("nebua-nicknames", next);
+      write("luna-nicknames", next);
       return next;
     });
   }, []);

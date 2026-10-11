@@ -1,12 +1,15 @@
 import type { SVGProps } from "react";
 
 /*
- * Nebua's own icon set. Drawn by hand on a 24 grid: 1.4 stroke, round caps, currentColor.
+ * Luna's own icon set. Drawn by hand on a 24 grid: 1.4 stroke, round caps, currentColor.
  * Each glyph has one small quirk (an open ring, a bent shaft, a star that sparks) so the set reads as drawn.
  */
 type P = SVGProps<SVGSVGElement> & { active?: boolean; size?: number };
 
-const base = ({ size = 20, active: _a, ...p }: P) => ({
+const base = ({ size = 20, ...rest }: P) => {
+  const p = { ...rest };
+  delete p.active;
+  return {
   width: size,
   height: size,
   viewBox: "0 0 24 24",
@@ -17,7 +20,8 @@ const base = ({ size = 20, active: _a, ...p }: P) => ({
   strokeLinejoin: "round" as const,
   "aria-hidden": true,
   ...p,
-});
+  };
+};
 
 /** Four-point star; filled when marked. */
 export const IconStar = ({ active, ...p }: P) => (

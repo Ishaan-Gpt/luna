@@ -128,3 +128,24 @@ export function fam(v: "--font-martian" | "--font-hanken" | "--font-bodoni") {
   }
   return fontCache[v];
 }
+
+/** A brighter ramp for timelines, so the dark hours still read against glass. */
+const BAR: [number, string, string][] = [
+  [0, "#e2a27c", "#dca29b"],
+  [-6, "#7a6670", "#7d6874"],
+  [-12, "#34474b", "#36464c"],
+  [-18, "#1c3a34", "#1c3a34"],
+  [-90, "#18332e", "#18332e"],
+];
+export function barColor(sunAlt: number, dawn: boolean) {
+  const a = Math.min(0, Math.max(-90, sunAlt));
+  for (let i = 0; i < BAR.length - 1; i++) {
+    const [a1, d1, w1] = BAR[i];
+    const [a2, d2, w2] = BAR[i + 1];
+    if (a <= a1 && a >= a2) {
+      const t = (a1 - a) / (a1 - a2);
+      return rgb(mix(hex(dawn ? w1 : d1), hex(dawn ? w2 : d2), t));
+    }
+  }
+  return BAR[BAR.length - 1][1];
+}

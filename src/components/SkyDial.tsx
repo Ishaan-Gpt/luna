@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { DUST, MILKY, eqToHor, lst, moonAltAz, moonInfo, planetsAltAz, sunAltAz, type Loc } from "@/lib/sky";
+import { DUST, MILKY, eqToHor, lst, precessor, moonAltAz, moonInfo, planetsAltAz, sunAltAz, type Loc } from "@/lib/sky";
 import { LINES, STARS, STAR_BY_ID } from "@/lib/stars";
 import { TINT, darkness, drawMoon, drawStar, fam, glow, rgb, setupCanvas, skyColors } from "@/lib/draw";
 
@@ -54,8 +54,13 @@ export function SkyDial({
 
     const sun = sunAltAz(date, loc);
     const vis = Math.max(0.25, darkness(sun.alt));
-    const [top, mid, hor] = skyColors(sun.alt, false);
+    const [top, mid, rim] = skyColors(sun.alt, false);
     const L = lst(date, loc.lon);
+    const P = precessor(date);
+    const hor = (ra: number, dec: number) => {
+      const p = P(ra, dec);
+      return eqToHor(p.ra, p.dec, loc.lat, L);
+    };
     const project = (alt: number, az: number) => {
       const r = ((90 - alt) / 90) * R;
       return { x: cx - r * Math.sin(az * D2R), y: cy - r * Math.cos(az * D2R) };
@@ -65,7 +70,7 @@ export function SkyDial({
     const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
     bg.addColorStop(0, rgb(top, 0.92));
     bg.addColorStop(0.75, rgb(mid, 0.92));
-    bg.addColorStop(1, rgb(hor, 0.95));
+    bg.addColorStop(1, rgb(rim, 0.95));
     ctx.fillStyle = bg;
     ctx.beginPath();
     ctx.arc(cx, cy, R, 0, Math.PI * 2);
@@ -81,7 +86,7 @@ export function SkyDial({
     const g = glow();
     const ms = W / 520;
     for (const m of MILKY) {
-      const p = eqToHor(m.ra, m.dec, loc.lat, L);
+      const p = hor(m.ra, m.dec);
       if (p.alt < 0) continue;
       const q = project(p.alt, p.az);
       const s = m.s * ms;
@@ -107,7 +112,7 @@ export function SkyDial({
     ctx.fillStyle = "#efe8da";
     for (const d of DUST) {
       if (d.mag > limit - 0.4) continue;
-      const p = eqToHor(d.ra, d.dec, loc.lat, L);
+      const p = hor(d.ra, d.dec);
       if (p.alt < 0) continue;
       const q = project(p.alt, p.az);
       ctx.globalAlpha = Math.min(1, (limit - d.mag) / 1.6) * 0.45;
@@ -118,7 +123,7 @@ export function SkyDial({
     // Stars
     const placed = new Map<string, { x: number; y: number; alt: number }>();
     for (const s of STARS) {
-      const p = eqToHor(s.ra, s.dec, loc.lat, L);
+      const p = hor(s.ra, s.dec);
       if (p.alt > -1) placed.set(s.id, { ...project(p.alt, p.az), alt: p.alt });
     }
     ctx.strokeStyle = `rgba(180,154,107,${0.32 + 0.18 * vis})`;

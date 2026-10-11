@@ -1,5 +1,5 @@
 /*
- * Bright-star catalogue for the Nebua demos.
+ * Bright-star catalogue for the Luna demos.
  * Positions are J2000 right ascension / declination in degrees, magnitudes are visual (V).
  * Distances (light years) and ages are published estimates, rounded, and shown as "est." in the UI.
  */

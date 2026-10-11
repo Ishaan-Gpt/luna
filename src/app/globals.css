@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Nebua tokens: one night at a dark-sky site. Teal-black night, green airglow, brass hairlines,
+/* Luna tokens: one night at a dark-sky site. Teal-black night, green airglow, brass hairlines,
    starlight cream, and one accent: the red torch observers use to keep their night vision. */
 :root {
   --night: #0a1211;

@@ -1,5 +1,5 @@
 {
-  "name": "nebua",
+  "name": "luna",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "astronomy-engine": "^2.1.19",
+    "lenis": "^1.3.26",
+    "motion": "^14.1.0",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"

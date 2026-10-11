@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 /**
- * The Nebua mark: a planisphere. A disc with brass hour ticks and an offset oval window
+ * The Luna mark: a planisphere. A disc with brass hour ticks and an offset oval window
  * (the opening that shows tonight's sky), with one four-point star inside it.
  */
 export function LogoMark({ size = 28, ...p }: SVGProps<SVGSVGElement> & { size?: number }) {
@@ -22,5 +22,5 @@ export function LogoMark({ size = 28, ...p }: SVGProps<SVGSVGElement> & { size?:
 }
 
 export function Wordmark({ className = "" }: { className?: string }) {
-  return <span className={`font-display italic tracking-[-0.02em] ${className}`}>Nebua</span>;
+  return <span className={`font-display italic tracking-[-0.02em] ${className}`}>Luna</span>;
 }
