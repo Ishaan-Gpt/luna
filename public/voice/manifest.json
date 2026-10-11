@@ -1,0 +1,131 @@
+{
+  "voice": "JBFqnCBsd6RMkjVDRZzb",
+  "source": "ElevenLabs eleven_multilingual_v2",
+  "stories": {
+    "hip:32349": {
+      "name": "Sirius",
+      "text": "Sirius is the brightest star in the night sky, just eight point six light years away. It has a faint companion, a white dwarf the size of Earth.",
+      "file": "/voice/hip-32349.mp3"
+    },
+    "hip:30438": {
+      "name": "Canopus",
+      "text": "Canopus is the second brightest star in the sky. Spacecraft have used it as a fixed point to keep their bearings.",
+      "file": "/voice/hip-30438.mp3"
+    },
+    "hip:69673": {
+      "name": "Arcturus",
+      "text": "Arcturus is an orange giant thirty seven light years away. Follow the curve of the Big Dipper's handle and arc to Arcturus.",
+      "file": "/voice/hip-69673.mp3"
+    },
+    "hip:91262": {
+      "name": "Vega",
+      "text": "Vega, in Lyra, is twenty five light years away. In about twelve thousand years, Earth's wobble will make it our pole star.",
+      "file": "/voice/hip-91262.mp3"
+    },
+    "hip:24608": {
+      "name": "Capella",
+      "text": "Capella looks like one star, but it is two pairs of stars, forty three light years away, shining as one golden point.",
+      "file": "/voice/hip-24608.mp3"
+    },
+    "hip:24436": {
+      "name": "Rigel",
+      "text": "Rigel marks Orion's foot. It is a blue supergiant hundreds of light years away, tens of thousands of times brighter than the Sun.",
+      "file": "/voice/hip-24436.mp3"
+    },
+    "hip:37279": {
+      "name": "Procyon",
+      "text": "Procyon's name means before the dog: it rises just before Sirius, the Dog Star. It is only eleven light years away.",
+      "file": "/voice/hip-37279.mp3"
+    },
+    "hip:27989": {
+      "name": "Betelgeuse",
+      "text": "Betelgeuse is the red shoulder of Orion, a supergiant so large it would swallow the orbit of Mars. In 2020 it dimmed so much that astronomers wondered if it was about to explode.",
+      "file": "/voice/hip-27989.mp3"
+    },
+    "hip:97649": {
+      "name": "Altair",
+      "text": "Altair spins so fast, about once every nine hours, that it bulges at its equator. It is seventeen light years away.",
+      "file": "/voice/hip-97649.mp3"
+    },
+    "hip:21421": {
+      "name": "Aldebaran",
+      "text": "Aldebaran is the orange eye of Taurus the bull. It looks like part of the Hyades cluster around it, but it is much closer to us.",
+      "file": "/voice/hip-21421.mp3"
+    },
+    "hip:80763": {
+      "name": "Antares",
+      "text": "Antares is the red heart of Scorpius. Its name means rival of Mars, because the two look so alike.",
+      "file": "/voice/hip-80763.mp3"
+    },
+    "hip:65474": {
+      "name": "Spica",
+      "text": "Spica, in Virgo, is two hot blue stars orbiting each other so closely they are stretched into egg shapes.",
+      "file": "/voice/hip-65474.mp3"
+    },
+    "hip:37826": {
+      "name": "Pollux",
+      "text": "Pollux is the brighter twin in Gemini, an orange giant with a planet of its own.",
+      "file": "/voice/hip-37826.mp3"
+    },
+    "hip:102098": {
+      "name": "Deneb",
+      "text": "Deneb, the tail of Cygnus the swan, is one of the most luminous stars you can see. It is so far away that its distance is still uncertain.",
+      "file": "/voice/hip-102098.mp3"
+    },
+    "hip:11767": {
+      "name": "Polaris",
+      "text": "Polaris, the North Star, sits less than one degree from the celestial pole, so the whole northern sky seems to turn around it.",
+      "file": "/voice/hip-11767.mp3"
+    },
+    "hip:113368": {
+      "name": "Fomalhaut",
+      "text": "Fomalhaut is often called the lonely star of autumn, bright in an empty part of the sky. A ring of dust circles it.",
+      "file": "/voice/hip-113368.mp3"
+    },
+    "hip:49669": {
+      "name": "Regulus",
+      "text": "Regulus is the heart of Leo. It sits so close to the Sun's path that the Moon often passes right in front of it.",
+      "file": "/voice/hip-49669.mp3"
+    },
+    "moon": {
+      "name": "The Moon",
+      "text": "The Moon always shows us the same face. The dark patches you can see are old seas of lava, billions of years old.",
+      "file": "/voice/moon.mp3"
+    },
+    "planet:jupiter": {
+      "name": "Jupiter",
+      "text": "Jupiter is the largest planet. Hold a pair of binoculars steady and you can see up to four of its moons in a line beside it.",
+      "file": "/voice/planet-jupiter.mp3"
+    },
+    "planet:saturn": {
+      "name": "Saturn",
+      "text": "Saturn looks like a steady golden star. Even a small telescope shows its rings.",
+      "file": "/voice/planet-saturn.mp3"
+    },
+    "planet:mars": {
+      "name": "Mars",
+      "text": "Mars gets its colour from rusted iron in its dust. Every two years it swings close to Earth and shines brighter.",
+      "file": "/voice/planet-mars.mp3"
+    },
+    "planet:venus": {
+      "name": "Venus",
+      "text": "Venus is the brightest planet, wrapped in thick cloud. Through binoculars you can see it show phases, like a tiny moon.",
+      "file": "/voice/planet-venus.mp3"
+    },
+    "dso:NGC 1976": {
+      "name": "The Orion Nebula",
+      "text": "The fuzzy patch in Orion's sword is the Orion Nebula, a nursery where new stars are forming, more than a thousand light years away.",
+      "file": "/voice/dso-ngc-1976.mp3"
+    },
+    "dso:M 45": {
+      "name": "The Pleiades",
+      "text": "The Pleiades, or Seven Sisters, is a cluster of young blue stars. Most people can count six; dark skies show many more.",
+      "file": "/voice/dso-m-45.mp3"
+    },
+    "dso:NGC 224": {
+      "name": "The Andromeda Galaxy",
+      "text": "The Andromeda Galaxy is about two and a half million light years away. The light you see left it before our species existed.",
+      "file": "/voice/dso-ngc-224.mp3"
+    }
+  }
+}
